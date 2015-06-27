@@ -27,13 +27,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 不自动调整scrollView
     self.automaticallyAdjustsScrollViewInsets = NO;
+    // 水平和垂直滑动指示器不可见
+    self.smallScrollView.showsHorizontalScrollIndicator = NO;
+    self.smallScrollView.showsHorizontalScrollIndicator = NO;
     
-    [self addTableViewControllers];
-    [self addTitleLabel];
+    [self addTableViewControllers];  // 每个title对应一个控制器
+    [self addTitleLabel];  // 添加title, 并增加点击事件
     
     self.bigScrollView.contentSize = CGSizeMake(self.view.bounds.size.width * 3, 0);
     self.bigScrollView.pagingEnabled = YES;
+
+    //获得第一个TableViewController
+    UITableViewController *mainTableViewController = [self.childViewControllers firstObject];
+    mainTableViewController.view.frame = self.bigScrollView.bounds;
+    [self.bigScrollView addSubview:mainTableViewController.view];
+    UILabel *title = [self.smallScrollView.subviews firstObject];
+    title.textColor = [UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1];
 
 }
 
@@ -74,6 +85,7 @@
         UITableViewController *tableViewController =  self.childViewControllers[i];
         title.font = [UIFont systemFontOfSize:12];
         title.text = tableViewController.title;
+        title.textAlignment = NSTextAlignmentCenter;  //居中显示
         NSLog(@"Label :%@, %f, %f, %f, %f", title.text, labelX, labelY, labelW, labelH);
         title.frame = CGRectMake(labelX, labelY, labelW, labelH);
         title.tag = 2000 + i;
